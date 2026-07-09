@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "order"
+require_relative "order"
 
 class OrderRepository
   class OrderNotFoundError < StandardError; end
