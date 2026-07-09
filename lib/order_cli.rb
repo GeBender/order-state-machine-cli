@@ -40,6 +40,8 @@ class OrderCLI
 
   def handle_option(option)
     case option
+    when nil
+      exit_program
     when "1"
       create_order
     when "2"
