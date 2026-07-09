@@ -23,6 +23,9 @@ class OrderCLI
 
   def display_menu
     puts
+    puts "════════════════════════════════════════"
+    puts "            Menu de Pedidos"
+    puts "════════════════════════════════════════"
     puts "1. Criar pedido"
     puts "2. Listar pedidos"
     puts "3. Consultar pedido"
@@ -31,6 +34,7 @@ class OrderCLI
     puts "6. Entregar pedido"
     puts "7. Cancelar pedido"
     puts "8. Sair"
+    puts "════════════════════════════════════════"
     print "Escolha uma opção: "
   end
 
@@ -59,27 +63,31 @@ class OrderCLI
     when "8"
       exit_program
     else
-      puts "Erro: opção inválida. Escolha uma opção entre 1 e 8."
+      print_error("Opção inválida. Escolha uma opção entre 1 e 8.")
     end
   end
 
   def create_order
     order = repository.create
 
-    puts "Pedido ##{order.id} criado com sucesso. Estado: #{order.state}"
+    print_success("Pedido ##{order.id} criado com sucesso! Estado: #{order.state}")
   end
 
   def list_orders
     orders = repository.all
 
     if orders.empty?
-      puts "Nenhum pedido criado."
+      print_notice("Nenhum pedido criado.")
       return
     end
 
+    puts
+    puts "📦 Pedidos existentes"
+    puts "────────────────────────────────────────"
     orders.each do |order|
       puts "##{order.id} - #{order.state}"
     end
+    puts
   end
 
   def show_order
@@ -87,8 +95,12 @@ class OrderCLI
 
     return unless order
 
-    puts "Pedido ##{order.id} — Estado atual: #{order.state}"
+    puts
+    puts "🔎 Detalhes do pedido ##{order.id}"
+    puts "────────────────────────────────────────"
+    puts "Estado atual: #{order.state}"
     puts "Histórico: #{order.history.join(' -> ')}"
+    puts
   end
 
   def transition_order(action, success_description)
@@ -98,9 +110,9 @@ class OrderCLI
 
     order.public_send(action)
 
-    puts "Pedido ##{order.id} #{success_description} com sucesso. Estado: #{order.state}"
+    print_success("Pedido ##{order.id} #{success_description} com sucesso! Estado: #{order.state}")
   rescue Order::InvalidTransitionError => error
-    puts "Erro: #{error.message}"
+    print_error(error.message)
   end
 
   def find_order_from_input
@@ -110,7 +122,7 @@ class OrderCLI
 
     repository.find(id)
   rescue OrderRepository::OrderNotFoundError => error
-    puts "Erro: #{error.message}"
+    print_error(error.message)
     nil
   end
 
@@ -120,7 +132,7 @@ class OrderCLI
     input = gets&.strip
 
     unless valid_integer?(input)
-      puts "Erro: informe um número de pedido válido."
+      print_error("Informe um número de pedido válido.")
       return nil
     end
 
@@ -129,6 +141,24 @@ class OrderCLI
 
   def valid_integer?(input)
     input&.match?(/\A\d+\z/)
+  end
+
+  def print_success(message)
+    puts
+    puts "✅ #{message}"
+    puts
+  end
+
+  def print_error(message)
+    puts
+    puts "❌ Erro: #{message}"
+    puts
+  end
+
+  def print_notice(message)
+    puts
+    puts "ℹ️ #{message}"
+    puts
   end
 
   def exit_program

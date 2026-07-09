@@ -86,6 +86,8 @@ Transições inválidas levantam uma exceção customizada (`Order::InvalidTrans
 
 Busca de pedido por ID também é tratada com exceção específica (`OrderRepository::OrderNotFoundError`), garantindo que entradas inválidas não interrompam o fluxo principal.
 
+A interface do terminal foi desenhada para ser intuitiva e agradável: mensagens destacadas com emojis, separadores visuais e respostas claras ajudam o usuário a entender o resultado de cada ação.
+
 ### Escolha intencional de Ruby puro
 O projeto evita gems de state machine como `aasm` ou `state_machines` para evidenciar o entendimento das regras de domínio e mostrar a capacidade de implementar uma máquina de estados com código direto e explícito.
 
@@ -103,7 +105,7 @@ Cobertura inclui:
 
 A camada de CLI não é testada automaticamente, conforme solicitado pelo enunciado.
 
-## O que entregar
+## Conclusão
 
 Este repositório mostra não apenas uma solução funcional, mas também:
 
